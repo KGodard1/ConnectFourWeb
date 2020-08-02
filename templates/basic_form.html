@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+
+<html>
+<head>
+	<h1>Hello there, just seeing if this form works</h1>
+	<link rel="shortcut icon" href="">
+</head>
+
+<div class='formwrapper'>
+	<h2 class="title">Game</h2>
+	<form method="POST" action="/formtest">
+		<div class="form-field">{{ form.row.label}} {{form.row(size=20) }}</div>
+		{{form.submit}}
+	</form>
+</div>
+
+</html>
