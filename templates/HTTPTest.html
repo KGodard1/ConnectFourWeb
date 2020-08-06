@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+
+
+<html>
+<head>
+<h1>Hello there!</h1>
+<h2>{{key}}</h2>
+</head>
+
+<svg id="laneIcons" height="35" width="520">
+	<polygon id="icon1" class="icon" points="30,0 70,0 50,35" 
+	onclick="sendmessage( {{ key }}, 23 )"; />
+</svg>
+<script>
+
+function sendmessage(secret_key, move) {
+	/*
+	var xhttp = new XMLHttpRequest();
+	xhttp.onreadystatechange = function() {
+		if(this.readyState == 4 && this.status == 200) {
+			document.getElementById("laneIcons").style.fill = "blue";
+		}
+	};
+	xhttp.open("POST", "/XMLTest", true);
+	xhttp.setRequestHeader('secret_key', secret_key)
+	xhttp.send("skey=secret_key");
+	*/
+	var obj = {"skey":secret_key, "tile":move}
+	let response = fetch("/XMLTest", {
+		method: 'POST',
+		headers: {
+			'Content-Type': 'application/json;charset=utf-8'
+		},
+		body: JSON.stringify(obj)
+	});
+}
+
+</script>
+
+
+
+
+</html>
