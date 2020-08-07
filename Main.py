@@ -38,15 +38,24 @@ def game(gameID):
 		#RETURN BAD REQUEST
 		return redirect(url_for('index'))
 	gameInfo = "game:" + str(gameID)
+	gameBoard = "board:" + str(gameID)
 	if r.hexists(gameInfo, "p2"):
 		#GAME IS FULL
 		return redirect(url_for('index'))
 	elif r.hexists(gameInfo, "p1"):
 		code = ''.join(random.choices(string.ascii_uppercase + string.digits, k=5))
 		r.hset(gameInfo, "p2", code)
+		r.hset(gameInfo, "phase", "playing")
 	else:
 		code = ''.join(random.choices(string.ascii_uppercase + string.digits, k=5))
 		r.hset(gameInfo, "p1", code)
+		r.hset(gameInfo, "phase", "waiting")
+		r.hset(gameInfo, "ID", str(gameID))
+		while r.llen(gameBoard) < 42:
+			r.rpush(gameBoard, 0)
+
+	return render_template("game.html")
+
 
 	return redirect(url_for('bio'))
 @app.route("/hello")
