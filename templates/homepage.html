@@ -111,6 +111,16 @@ function changeColor(elemnt, color) {
 
 <div id="winMessage"></div>
 
+<div id="gamePanel", class="formwrapper">
+	<form method="GET" action="/createGame">
+		<div class="form-field">{{ makeGameButton.submit.label}} {{makeGameButton.submit(size=20) }}</div>
+		
+	</form>
+	<form method='POST' action="/createGame">
+		<div class="form-field">{{ joinGameForm.game.label}} {{joinGameForm.game(size=20) }}</div>
+		{{joinGameForm.submit}}		
+	</form>
+</div>
 
 </body>
 

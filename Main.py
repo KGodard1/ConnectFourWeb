@@ -1,23 +1,54 @@
 
 from flask import Flask, flash, redirect, render_template, request, session, abort, url_for
-from forms import MakeMoveForm
+from forms import MakeMoveForm, MakeNewGameButton, JoinGameForm
 import redis
 import random 
+import string
 import json
+
 app = Flask(__name__)
 app.config.from_object('config.Config')
 
 
 
 r = redis.Redis()
-r.set("name",'karl')
-print(r.get("name"))
+
 r.set("score", 0)
 
 @app.route("/")
 def index():
-	return render_template('homepage.html')
+	makeGame = MakeNewGameButton()
+	joinGame = JoinGameForm()
+	return render_template('homepage.html', makeGameButton=makeGame,
+		joinGameForm=joinGame)
 
+@app.route("/createGame", methods=['GET', 'POST'])
+def createGame():
+	if request.method == "POST":
+		print("here")
+		result = request.form
+		return redirect(url_for('game', gameID=result['game']))
+	code = ''.join(random.choices(string.ascii_uppercase + string.digits, k=5))
+	r.sadd("games", code)
+	return redirect(url_for('game', gameID=code))
+
+@app.route("/game/<gameID>")
+def game(gameID):
+	if not r.sismember("games", gameID):
+		#RETURN BAD REQUEST
+		return redirect(url_for('index'))
+	gameInfo = "game:" + str(gameID)
+	if r.hexists(gameInfo, "p2"):
+		#GAME IS FULL
+		return redirect(url_for('index'))
+	elif r.hexists(gameInfo, "p1"):
+		code = ''.join(random.choices(string.ascii_uppercase + string.digits, k=5))
+		r.hset(gameInfo, "p2", code)
+	else:
+		code = ''.join(random.choices(string.ascii_uppercase + string.digits, k=5))
+		r.hset(gameInfo, "p1", code)
+
+	return redirect(url_for('bio'))
 @app.route("/hello")
 def hello():
 	return render_template('board_page.html')
