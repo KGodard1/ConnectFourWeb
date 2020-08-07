@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+<style>
+
+#myCanvas {
+	display:block;
+	background-color:rgb(255,255,0);
+	border-style:solid;
+	margin:auto;
+
+}
+
+#laneIcons {
+	display:block;
+	margin:auto;
+	padding-bottom: 10px;
+}
+
+.icon {
+	fill:white;
+	stroke:black;
+	stroke-width:1
+}
+h1 {
+	color:black;
+	font-family: Arial, Helvetica, sans-serif;
+	text-align:center;
+	padding-bottom: 50px;
+	font-size:50px;
+}
+body {
+	background-color: rgb(153,204,255);
+}
+
+div {
+	font-family: Arial, Helvetica, sans-serif;
+	text-align:center;
+	padding-top:40px;
+	font-size:50px;
+}
+
+	
+}
+</style>
+</head>
+
+
+
+
+
+<body>
+
+<h1>Connect Four</h1>
+
+<svg id="laneIcons" height="35" width="520">
+	<polygon id="icon1" class="icon" points="30,0 70,0 50,35" ;
+	onmouseover="changeColor(this, 'purple')";
+	onmouseout="changeColor(this, 'white')";
+	onclick="makeMove(0)";/>
+	
+	
+	<polygon id="icon2" class="icon" points="100,0 140,0 120,35";
+	onmouseover="changeColor(this, 'purple')";
+	onmouseout="changeColor(this, 'white')";
+	onclick="makeMove(1)";/>
+	
+	
+	<polygon id="icon2" class="icon" points="170,0 210,0 190,35";
+	onmouseover="changeColor(this, 'purple')";
+	onmouseout="changeColor(this, 'white')";
+	onclick="makeMove(2)";/>
+	
+	
+	<polygon id="icon2" class="icon" points="240,0 280,0 260,35";
+	onmouseover="changeColor(this, 'purple')";
+	onmouseout="changeColor(this, 'white')";
+	onclick="makeMove(3)";/>
+	
+	
+	<polygon id="icon2" class="icon" points="310,0 350,0 330,35";
+	onmouseover="changeColor(this, 'purple')";
+	onmouseout="changeColor(this, 'white')";
+	onclick="makeMove(4)";/>
+	
+	
+	<polygon id="icon2" class="icon" points="380,0 420,0 400,35";
+	onmouseover="changeColor(this, 'purple')";
+	onmouseout="changeColor(this, 'white')";
+	onclick="makeMove(5)";/>
+	
+	
+	<polygon id="icon2" class="icon" points="450,0 490,0 470,35";
+	onmouseover="changeColor(this, 'purple')";
+	onmouseout="changeColor(this, 'white')";
+	onclick="makeMove(6)";/>
+	
+	
+</svg>
+<script>
+
+function changeColor(elemnt, color) {
+	elemnt.style.fill= color;
+}
+</script>
+
+
+<canvas id="myCanvas"  width=520 height =360 padding></canvas>
+
+<div id="winMessage"></div>
+
+
+</body>
+
+<script src="{{ url_for('static', filename = 'homepage.js') }}"  charset=utf-8>>
+</script>
+
+
+
+
+</html>
