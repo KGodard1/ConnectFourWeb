@@ -5,6 +5,7 @@
 <head>
 <h1>Hello there!</h1>
 <h2>{{key}}</h2>
+<h3 id="scorekeeper">0</h3>
 </head>
 
 <svg id="laneIcons" height="35" width="520">
@@ -12,6 +13,13 @@
 	onclick="sendmessage( {{ key }}, 23 )"; />
 </svg>
 <script>
+
+function validateResponse(response) {
+	if(!response.ok) {
+		throw Error(response.statusText)
+	}
+	return response;
+}
 
 function sendmessage(secret_key, move) {
 	/*
@@ -25,14 +33,22 @@ function sendmessage(secret_key, move) {
 	xhttp.setRequestHeader('secret_key', secret_key)
 	xhttp.send("skey=secret_key");
 	*/
+	console.log("Testing print")
 	var obj = {"skey":secret_key, "tile":move}
-	let response = fetch("/XMLTest", {
+	let fetchPromise = fetch("/XMLTest", {
 		method: 'POST',
 		headers: {
 			'Content-Type': 'application/json;charset=utf-8'
 		},
 		body: JSON.stringify(obj)
 	});
+	fetchPromise.then(response => {
+		return response.json();
+	}).then(status => {
+		document.getElementById("scorekeeper").innerHTML = status["current"];
+	});
+	
+	
 }
 
 </script>

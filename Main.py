@@ -3,6 +3,7 @@ from flask import Flask, flash, redirect, render_template, request, session, abo
 from forms import MakeMoveForm
 import redis
 import random 
+import json
 app = Flask(__name__)
 app.config.from_object('config.Config')
 
@@ -12,15 +13,10 @@ r = redis.Redis()
 r.set("name",'karl')
 print(r.get("name"))
 r.set("score", 0)
-for i in range(0, 42):
-	r.rpush("mylist", 0)
 
-
-print(r.lindex("mylist", 5))
-print(r.llen("mylist"))
 @app.route("/")
 def index():
-	return "Index"
+	return render_template('homepage.html')
 
 @app.route("/hello")
 def hello():
@@ -57,6 +53,10 @@ def XMLTest():
 		print("In Post Request")
 		print(request.data)
 		print(type(request.data))
+		newObj = json.loads(request.data)
+		print(newObj["skey"])
+		r.incrby("score", newObj["tile"])
+		return redirect(url_for("update"))
 		
 		
 
@@ -64,8 +64,16 @@ def XMLTest():
 	return render_template('HTTPTest.html', key=r.get('player1key').decode('utf-8'))
 
 
-
-
+@app.route("/XMLTest/update")
+def update():
+	state = {
+	"current":  str(r.get("score")),
+	"phase" : "Playing"
+	}
+	obj = json.dumps(state)
+	print(obj)
+	print(type(obj))
+	return obj
 
 
 if __name__ == "__main__":
