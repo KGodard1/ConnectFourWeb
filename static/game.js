@@ -10,6 +10,10 @@ var arr = new Array(42).fill(0);
 
 drawBoard(arr);
 
+function testFunc(gameID) {
+	console.log(typeof gameID)
+	console.log("Test" + gameID)
+}
 
 
 function makeMove(lane, key, gameID) {
@@ -40,9 +44,24 @@ function handleMoveResponse(update) {
 	console.log(update);
 	return 1;
 }
-
-function getUpdate(){
-
+function handleUpdate(update) {
+	console.log(update);	
+	drawBoard(update["board"])
+	return 1
+}
+function getUpdate(gameID){
+	update_url = "/game/getUpdate/" + gameID
+	
+	let fetchPromise = fetch(update_url, {
+		method: 'GET'
+	});
+	fetchPromise.then(response => {
+		return response.json();
+	}).then(status => {
+		return handleUpdate(status);
+	}).then(function(wait) {
+		setTimeout(getUpdate, 3000, gameID)
+	})
 }
 
 function drawBoard(boardstate) {

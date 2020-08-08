@@ -102,14 +102,15 @@ def makemove():
 		else:
 			r.hset(gameData, "turn", "p1")
 
-		if checkForTie(board):
+		
+		if checkForWin(board, move[0], move[1]):
+			win_data = {"move_made":True, "phase": "end", "outcome": turnToMove, "board": board}
+			win_json = json.dumps(win_data)
+			return win_json
+		elif checkForTie(board):
 			tie_data = {"move_made":True, "phase":"end", "outcome":"tie", "board": board}
 			tie_json = json.dumps(tie_data)
 			return tie_json
-		elif checkForWin(board, turnToMove):
-			win_data = {"move_made":True, "phase": "end", "outcome": turntoMove, "board": board}
-			win_json = json.dumps(win_data)
-			return win_json
 		else:
 			neutral_data = {"move_made":True, "phase": "playing", "outcome":"still playing", "board": board}
 			neutral_json = json.dumps(neutral_data)
@@ -118,7 +119,12 @@ def makemove():
 @app.route("/game/getUpdate/<gameID>")
 def getUpdate(gameID):
 	gameData = "game:" + str(gameID)
-	phase = r.hget(gameData, "phase")
+	boardData = "board:" + str(gameID)
+	phase = r.hget(gameData, "phase").decode('utf-8')
+	board = [int(tile) for tile in r.lrange(boardData, 0, -1)]
+	updateData = {"phase": phase, "board": board}
+	updateJson = json.dumps(updateData)
+	return updateJson
 
 
 @app.route("/hello")
