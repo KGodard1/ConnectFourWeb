@@ -12,22 +12,33 @@ drawBoard(arr);
 
 
 
-function makeMove(lane) {
-	var move_data = {"secret_key"={{key}}, "tile":lane}
-	var update_url = '/game/update/' + {{gameID}};
+function makeMove(lane, key, gameID) {
+	var move_data = {"gameID":gameID, "secret_key":key, "lane":lane}
+	var update_url = '/game/makemove';
 
 	let fetchPromise = fetch(update_url, {
 		method: 'POST',
 		headers: {
 			'Content-Type': 'application/json;charset=utf-8'
 		},
-		body: JSON.stringify(mode_data)
+		body: JSON.stringify(move_data)
 	});
 	fetchPromise.then(response => {
 		return response.json();
 	}).then(status => {
-		console.log(status)
-	})
+		handleMoveResponse(status);
+	});
+}
+
+function handleMoveResponse(update) {
+	if (update["move_made"] == 0) {
+		console.log(update);
+		return 0;
+	}
+	console.log(update["board"]);
+	drawBoard(update["board"])
+	console.log(update);
+	return 1;
 }
 
 function getUpdate(){
@@ -124,4 +135,4 @@ function checkSequence(boardState, move, step) {
 	}
 	return true;
 }
-/*
+*/

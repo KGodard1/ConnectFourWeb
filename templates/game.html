@@ -53,49 +53,49 @@ div {
 
 <body>
 
-<h1>Connect Four</h1>
+<h1>{{ gameID }}</h1>
 
 <svg id="laneIcons" height="35" width="520">
 	<polygon id="icon1" class="icon" points="30,0 70,0 50,35" ;
 	onmouseover="changeColor(this, 'purple')";
 	onmouseout="changeColor(this, 'white')";
-	onclick="makeMove(0)";/>
+	onclick="makeMove(0, '{{ key }}', '{{ gameID }}')";/>
 	
 	
 	<polygon id="icon2" class="icon" points="100,0 140,0 120,35";
 	onmouseover="changeColor(this, 'purple')";
 	onmouseout="changeColor(this, 'white')";
-	onclick="makeMove(1)";/>
+	onclick="makeMove(1, '{{key}}', '{{gameID}}')";/>
 	
 	
 	<polygon id="icon2" class="icon" points="170,0 210,0 190,35";
 	onmouseover="changeColor(this, 'purple')";
 	onmouseout="changeColor(this, 'white')";
-	onclick="makeMove(2)";/>
+	onclick="makeMove(2, '{{key}}', '{{gameID}}')";/>
 	
 	
 	<polygon id="icon2" class="icon" points="240,0 280,0 260,35";
 	onmouseover="changeColor(this, 'purple')";
 	onmouseout="changeColor(this, 'white')";
-	onclick="makeMove(3)";/>
+	onclick="makeMove(3, '{{key}}', '{{gameID}}')";/>
 	
 	
 	<polygon id="icon2" class="icon" points="310,0 350,0 330,35";
 	onmouseover="changeColor(this, 'purple')";
 	onmouseout="changeColor(this, 'white')";
-	onclick="makeMove(4)";/>
+	onclick="makeMove(4, '{{key}}', '{{gameID}}')";/>
 	
 	
 	<polygon id="icon2" class="icon" points="380,0 420,0 400,35";
 	onmouseover="changeColor(this, 'purple')";
 	onmouseout="changeColor(this, 'white')";
-	onclick="makeMove(5)";/>
+	onclick="makeMove(5, '{{key}}', '{{gameID}}')";/>
 	
 	
 	<polygon id="icon2" class="icon" points="450,0 490,0 470,35";
 	onmouseover="changeColor(this, 'purple')";
 	onmouseout="changeColor(this, 'white')";
-	onclick="makeMove(6)";/>
+	onclick="makeMove(6, '{{key}}', '{{gameID}}')";/>
 	
 	
 </svg>
