@@ -6,8 +6,8 @@ load_dotenv(path.join(basedir, '.env'))
 
 class Config:
 
-    #TESTING = True
-    #DEBUG = True
-    FLASK_ENV = 'production'
+	#TESTING = True
+	#DEBUG = True
+	FLASK_ENV = 'production'
 	SECRET_KEY = environ.get('SECRET_KEY')
 	print(SECRET_KEY)
