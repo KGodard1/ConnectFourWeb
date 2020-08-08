@@ -12,14 +12,20 @@ def update_board(gameBoard, col, turn):
 		if (gameBoard[col +7*row] == 0):
 			print(col + 7*row)
 			gameBoard[col + 7 * row] = color
-			return (col + 7 * row);
+			return [col + 7 * row, color];
 	return "error"	
 
 def checkValidMove(gameBoard, col):
-	return True
+	for row in range(5, -1. -1):
+		if (gameBoard[col +7*row] == 0):
+			return True
+	return False
 
 def checkForTie(gameBoard):
-	return False
+	if 0 in gameBoard:
+		return False
+	else:
+		return True	
 
 
 def checkForWin(gameBoard, turn):

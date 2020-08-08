@@ -102,11 +102,11 @@ def makemove():
 		else:
 			r.hset(gameData, "turn", "p1")
 
-		if checkForTie(updated_board):
+		if checkForTie(board):
 			tie_data = {"move_made":True, "phase":"end", "outcome":"tie", "board": board}
 			tie_json = json.dumps(tie_data)
 			return tie_json
-		elif checkForWin(updated_board, turnToMove):
+		elif checkForWin(board, turnToMove):
 			win_data = {"move_made":True, "phase": "end", "outcome": turntoMove, "board": board}
 			win_json = json.dumps(win_data)
 			return win_json
