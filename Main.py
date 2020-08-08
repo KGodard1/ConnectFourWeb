@@ -13,10 +13,6 @@ app.config.from_object('config.Config')
 
 r = redis.Redis()
 
-r.set("score", 0)
-
-
-
 @app.route("/")
 def index():
 	makeGame = MakeNewGameButton()
@@ -54,9 +50,11 @@ def game(gameID):
 		r.hset(gameInfo, "phase", "waiting")
 		r.hset(gameInfo, "ID", str(gameID))
 		r.hset(gameInfo, "turn", "p1")#random.choice(["p1", "p2"]))
+		r.hset(gameInfo, "winner", "none")
 		while r.llen(gameBoard) < 42:
 			r.rpush(gameBoard, 0)
-
+	r.expire(gameInfo, 3600)
+	r.expire(gameBoard, 3600)
 	return render_template("game.html", key = code, phase=r.hget(gameInfo, "phase"), gameID=gameID)
 
 
@@ -72,6 +70,7 @@ def makemove():
 		print(moveData['secret_key'])
 		print(r.hget(gameData, turnToMove))
 		if r.hget(gameData, "phase").decode('utf-8') != "playing":
+
 			fail_data = {"move_made":False, "reason":"game not in session"}
 			fail_json = json.dumps(fail_data)
 			return fail_json
@@ -97,23 +96,26 @@ def makemove():
 		r.lset(boardData, move[0], move[1])
 
 
-		if turnToMove == "p1":
-			r.hset(gameData, "turn", "p2")
-		else:
-			r.hset(gameData, "turn", "p1")
+		
 
 		
 		if checkForWin(board, move[0], move[1]):
+			r.hset(gameData, "winner", turnToMove)
 			r.hset(gameData,"phase", "post-game")
 			win_data = {"move_made":True, "phase": "post-game", "outcome": turnToMove, "board": board}
 			win_json = json.dumps(win_data)
 			return win_json
 		elif checkForTie(board):
 			r.hset(gameData,"phase", "post-game")
+			r.hset(gameData, "winner", "tie")
 			tie_data = {"move_made":True, "phase":"post-game", "outcome":"tie", "board": board}
 			tie_json = json.dumps(tie_data)
 			return tie_json
 		else:
+			if turnToMove == "p1":
+				r.hset(gameData, "turn", "p2")
+			else:
+				r.hset(gameData, "turn", "p1")
 			neutral_data = {"move_made":True, "phase": "playing", "outcome":"still playing", "board": board}
 			neutral_json = json.dumps(neutral_data)
 			return neutral_json
@@ -122,9 +124,11 @@ def makemove():
 def getUpdate(gameID):
 	gameData = "game:" + str(gameID)
 	boardData = "board:" + str(gameID)
+	turnToMove = r.hget(gameData, "turn").decode('utf-8')
 	phase = r.hget(gameData, "phase").decode('utf-8')
 	board = [int(tile) for tile in r.lrange(boardData, 0, -1)]
-	updateData = {"phase": phase, "board": board}
+	winner = r.hget(gameData, "winner").decode('utf-8')
+	updateData = {"phase": phase, "board": board, "winner":winner,"turn":turnToMove}
 	updateJson = json.dumps(updateData)
 	return updateJson
 

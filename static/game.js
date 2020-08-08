@@ -46,7 +46,32 @@ function handleMoveResponse(update) {
 }
 function handleUpdate(update) {
 	console.log(update);	
+	console.log(update["phase"])
 	drawBoard(update["board"])
+	if (update["phase"] == "post-game"){
+		if (update["winner"] == "p1"){
+			document.getElementById("winMessage").innerHTML = "Player 1 wins!";
+		}
+		else if (update["winner"] == "p2") {
+			document.getElementById("winMessage").innerHTML = "Player 2 wins!";
+		}
+		else if (update["winner"] == "tie") {
+			document.getElementById("winMessage").innerHTML = "Tie!";
+		}
+		else {
+			document.getElementById("winMessage").innerHTML = "There seems to be an error...";
+		}
+	} else if (update["phase"] == "waiting") {
+		document.getElementById("winMessage").innerHTML = "Waiting for second player to join...";
+	} else if (update["phase"] == "playing") {
+		if (update["turn"] == "p1") {
+			document.getElementById("winMessage").innerHTML = "Player 1 to move";
+		} else {
+			document.getElementById("winMessage").innerHTML = "Player 2 to move";
+		}
+		
+	}
+
 	return 1
 }
 function getUpdate(gameID){
